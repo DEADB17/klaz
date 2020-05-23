@@ -8,12 +8,6 @@ const breakpoints = {
   lg: true,
 };
 
-const pseudos = {
-  sm: true,
-  md: true,
-  lg: true,
-};
-
 const arrayJoin = Array.prototype.join;
 
 /**
@@ -36,28 +30,21 @@ function kz(strings, ...keys) {
     : strings
   ).join("");
   const args = str.split(":").map((it) => it.trim());
-  let at,
-    pseudo,
-    prop,
-    val,
-    n = args.length;
-  if (n < 2) {
-    throw new Error("klaz: prop and val must be defined");
-  } else if (4 <= n) {
-    [at, pseudo, at, pseudo] = args;
-  } else {
+  const n = args.length;
+  let at, pseudo, prop, val;
+  if (n < 2) throw new Error("klaz: prop and val must be defined");
+  else if (2 === n) [prop, val] = args;
+  else if (4 <= n) [at, pseudo, prop, val] = args;
+  else {
+    // 3 elements
     val = args.pop();
     prop = args.pop();
-    if (prop == null || val == null) {
-      throw new Error("klaz: prop and val must be defined");
-    }
-  }
-  n = args.length;
-  if (n === 2) [at, pseudo] = args;
-  if (n === 1) {
     if (args[0] in breakpoints) at = args[0];
     else pseudo = args[0];
-  } // else at and pseudo are undefined
+  }
+  if (prop == null || val == null) {
+    throw new Error("klaz: prop and val must be defined");
+  }
   // Normalize at and pseudo
   at = typeof at === "string" && at.length ? at : NONE;
   pseudo = typeof pseudo === "string" && pseudo.length ? pseudo : NONE;
@@ -74,10 +61,7 @@ assert.equal(kz`margin-bottom:-6rem`, "X_X_margin-bottom_-6rem");
 assert.equal(kz`sm:margin-bottom:-6rem`, "sm_X_margin-bottom_-6rem");
 assert.equal(kz`hover:margin-bottom:-6rem`, "X_hover_margin-bottom_-6rem");
 assert.equal(kz`sm:hover:margin-bottom:-6rem`, "sm_hover_margin-bottom_-6rem");
-assert.equal(
-  kz`md:background-size:cover`,
-  "md_X_background-size_cover"
-);
+assert.equal(kz`md:background-size:cover`, "md_X_background-size_cover");
 assert.equal(
   kz`lg : background-size : auto 6px`,
   "lg_X_background-size_auto 6px"
@@ -86,3 +70,5 @@ assert.equal(
   kz`background-size : auto, 50%, contain`,
   "X_X_background-size_auto, 50%, contain"
 );
+
+console.log("ok");

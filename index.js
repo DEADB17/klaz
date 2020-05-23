@@ -8,6 +8,36 @@ const breakpoints = {
   lg: true,
 };
 
+const pseudos = {
+  active: true,
+  after: true,
+  before: true,
+  checked: true,
+  disabled: true,
+  empty: true,
+  enabled: true,
+  "first-child": true,
+  "first-letter": true,
+  "first-line": true,
+  // "first-of-type": true,
+  focus: true,
+  hover: true,
+  // "lang(": true,
+  "last-child": true,
+  // "last-of-type": true,
+  link: true,
+  // "not(": true,
+  // "nth-child(": true,
+  // "nth-last-child(": true,
+  // "nth-last-of-type(": true,
+  // "nth-of-type(": true,
+  "only-child": true,
+  // "only-of-type": true,
+  root: true,
+  target: true,
+  visited: true,
+};
+
 const arrayJoin = Array.prototype.join;
 
 /**
@@ -33,22 +63,38 @@ function kz(strings, ...keys) {
   const n = args.length;
   let at, pseudo, prop, val;
   if (n < 2) throw new Error("klaz: prop and val must be defined");
-  else if (2 === n) [prop, val] = args;
-  else if (4 <= n) [at, pseudo, prop, val] = args;
-  else {
+  else if (2 === n) {
+    [prop, val] = args;
+    at = pseudo = NONE;
+  } else if (4 <= n) {
+    [at, pseudo, prop, val] = args;
+    if (!isValid(at, breakpoints)) throw new Error("klaz: Invalid break-point");
+    if (!isValid(pseudo, pseudos))
+      throw new Error("klaz: Invalid pseudo-class/element");
+  } else {
     // 3 elements
     val = args.pop();
     prop = args.pop();
-    if (args[0] in breakpoints) at = args[0];
-    else pseudo = args[0];
+    if (args[0] in breakpoints) {
+      at = args[0];
+      pseudo = NONE;
+    } else if (args[0] in pseudos) {
+      at = NONE;
+      pseudo = args[0];
+    } else throw new Error("klaz: Invalid break-point or pseudo-class/element");
   }
   if (prop == null || val == null) {
     throw new Error("klaz: prop and val must be defined");
   }
-  // Normalize at and pseudo
-  at = typeof at === "string" && at.length ? at : NONE;
-  pseudo = typeof pseudo === "string" && pseudo.length ? pseudo : NONE;
   return classNameOf(at, pseudo, prop, val);
+}
+
+/**
+ * @arg {any} key
+ * @arg {Record<string, any>} set
+ */
+function isValid(key, set) {
+  return typeof key === "string" && 0 < key.length && key in set;
 }
 
 // /////////////////////////////////////////////////////////////////////////////

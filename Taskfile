@@ -44,7 +44,7 @@ function lint -d "Lint using typescript (tsc)"
 end
 
 function tester -d "Run tests"
-    node index.js
+    for f in *.js; node $f; end
 end
 
 # Available tasks

@@ -1,7 +1,9 @@
 import { strict as assert } from "assert";
 import { NONE, pseudos, props, values } from "../lib/tabs.js";
 
-/** @type {Record<string,string>} */
+/** @typedef {Record<string,string>} Brk */
+
+/** @type {Brk} */
 const breakpoints = {
   [NONE]: "X",
   sm: "s",
@@ -33,13 +35,14 @@ function formatValue(val) {
 
 // TODO(db17): break-points and pseudos are not really needed (Remove them)
 /**
+ * @arg {Brk} brk
  * @arg {string} at
  * @arg {string} pseudo
  * @arg {string} prop
  * @arg {string} val
  */
-function classNameOf(at, pseudo, prop, val) {
-  const a = breakpoints[at];
+function classNameOf(brk, at, pseudo, prop, val) {
+  const a = brk[at];
   const s = pseudos[pseudo];
   const p = props[prop];
   const v = formatValue(val);
@@ -87,7 +90,7 @@ function kz(strings, ...keys) {
     if (!(at in breakpoints)) throw new Error("klaz: Invalid break-point");
     if (!(pseudo in pseudos)) throw new Error("klaz: Invalid pseudo");
 
-    acc.push(classNameOf(at, pseudo, prop, val));
+    acc.push(classNameOf(breakpoints, at, pseudo, prop, val));
     return acc;
   }, acc);
   return res.join(" ");

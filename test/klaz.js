@@ -7,22 +7,25 @@ import { NONE } from "../lib/tabs.js";
 
 /**
  * @arg {Sheet?} sheet
- * @arg {string} _at
- * @arg {string} _pseudo
- * @arg {string} _prop
+ * @arg {string} at
+ * @arg {string} pseudo
+ * @arg {string} prop
  * @arg {string} val
  */
-function addRule(sheet, _at, _pseudo, _prop, val) {
+function addRule(sheet, at, pseudo, prop, val) {
+  const args = [at, prop, pseudo, val];
+  const len = args.length;
   /** @type {Kv[]} */
-  const stack = [sheet || /** @type {Kv} */ ({})];
-  for (let i = 1, n = arguments.length - 1; i < n; i++) {
-    stack[i] = /** @type {Kv} */ (stack[i - 1][arguments[i]] || {});
+  const stack = new Array(len);
+  stack[0] = sheet || /** @type {Kv} */ ({});
+  for (let i = 0, n = len - 1; i < n; i++) {
+    stack[i + 1] = /** @type {Kv} */ (stack[i][args[i]] || {});
   }
   /** @type {any} */
   let top;
-  for (let tmp = val, n = arguments.length; --n; ) {
-    top = stack[n - 1];
-    top[arguments[n]] = tmp;
+  for (let tmp = val, n = len; n--; ) {
+    top = stack[n];
+    top[args[n]] = tmp;
     tmp = top;
   }
   return top;
@@ -38,8 +41,8 @@ import { strict as assert } from "assert";
   actual = addRule(null, NONE, NONE, "margin", "0");
   expected = {
     [NONE]: {
-      [NONE]: {
-        margin: {
+      margin: {
+        [NONE]: {
           "0": "0",
         },
       },
@@ -50,8 +53,8 @@ import { strict as assert } from "assert";
   actual = addRule(actual, NONE, NONE, "margin", "0");
   expected = {
     [NONE]: {
-      [NONE]: {
-        margin: {
+      margin: {
+        [NONE]: {
           "0": "0",
         },
       },
@@ -64,21 +67,21 @@ import { strict as assert } from "assert";
   actual = addRule(actual, "md", "hover", "overflow", "auto");
   expected = {
     [NONE]: {
-      [NONE]: {
-        margin: {
+      margin: {
+        [NONE]: {
           "2px": "2px",
           "0": "0",
         },
       },
-      first: {
-        display: {
+      display: {
+        first: {
           flex: "flex",
         },
       },
     },
     md: {
-      hover: {
-        overflow: {
+      overflow: {
+        hover: {
           auto: "auto",
         },
       },

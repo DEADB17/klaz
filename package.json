@@ -15,7 +15,7 @@
     "node": ">=14"
   },
   "type": "module",
-  "main": "index.js",
+  "main": "lib/index.js",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^14.0.5",

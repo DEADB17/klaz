@@ -41,7 +41,7 @@ function formatValue(val) {
  * @arg {string} prop
  * @arg {string} val
  */
-function classNameOf(brk, at, pseudo, prop, val) {
+function createClassName(brk, at, pseudo, prop, val) {
   const a = brk[at];
   const s = pseudos[pseudo];
   const p = props[prop];
@@ -91,7 +91,7 @@ function klaz(brk, strings, ...keys) {
     if (!(at in breakpoints)) throw new Error("klaz: Invalid break-point");
     if (!(pseudo in pseudos)) throw new Error("klaz: Invalid pseudo");
 
-    acc.push(classNameOf(brk, at, pseudo, prop, val));
+    acc.push(createClassName(brk, at, pseudo, prop, val));
     return acc;
   }, acc);
   return res.join(" ");

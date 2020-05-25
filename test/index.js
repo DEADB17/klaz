@@ -50,10 +50,11 @@ function classNameOf(brk, at, pseudo, prop, val) {
 }
 
 /**
+ * @arg {Brk} brk
  * @arg {TemplateStringsArray} strings
  * @arg {(string|number)[]} keys
  */
-function kz(strings, ...keys) {
+function klaz(brk, strings, ...keys) {
   const str = (keys.length
     ? keys.map((it, i) => strings[i] + it.toString())
     : strings
@@ -90,10 +91,24 @@ function kz(strings, ...keys) {
     if (!(at in breakpoints)) throw new Error("klaz: Invalid break-point");
     if (!(pseudo in pseudos)) throw new Error("klaz: Invalid pseudo");
 
-    acc.push(classNameOf(breakpoints, at, pseudo, prop, val));
+    acc.push(classNameOf(brk, at, pseudo, prop, val));
     return acc;
   }, acc);
   return res.join(" ");
+}
+
+/**
+ * @arg {Brk} breakpoints
+ */
+function createKlaz(breakpoints) {
+  /**
+   * @arg {TemplateStringsArray} strings
+   * @arg {(string|number)[]} keys
+   */
+  function kz(strings, ...keys) {
+    return klaz(breakpoints, strings, ...keys);
+  }
+  return kz;
 }
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -122,16 +137,19 @@ console.log("ok");
 
 console.log("kz: Single rule");
 
-assert.equal(kz`color:red`, "X01yred");
-assert.throws(() => kz`one`, "Too few: Single arg");
-assert.equal(kz``, "", "OK: no arguments");
-assert.equal(kz`margin-bottom:-6rem`, "X04i-6rem");
-assert.equal(kz`sm:margin-bottom:-6rem`, "s04i-6rem");
-assert.equal(kz`hover:margin-bottom:-6rem`, "Xd4i-6rem");
-assert.equal(kz`sm:hover:margin-bottom:-6rem`, "sd4i-6rem");
-assert.equal(kz`md:background-size:cover`, "m00n25");
-assert.equal(kz`lg : background-size : auto 6px`, "l00n0j6px");
-assert.equal(kz`background-size : auto, 50%, contain`, "X00n0j,50%,1y");
+{
+  const kz = createKlaz(breakpoints);
+  assert.equal(kz`color:red`, "X01yred");
+  assert.throws(() => kz`one`, "Too few: Single arg");
+  assert.equal(kz``, "", "OK: no arguments");
+  assert.equal(kz`margin-bottom:-6rem`, "X04i-6rem");
+  assert.equal(kz`sm:margin-bottom:-6rem`, "s04i-6rem");
+  assert.equal(kz`hover:margin-bottom:-6rem`, "Xd4i-6rem");
+  assert.equal(kz`sm:hover:margin-bottom:-6rem`, "sd4i-6rem");
+  assert.equal(kz`md:background-size:cover`, "m00n25");
+  assert.equal(kz`lg : background-size : auto 6px`, "l00n0j6px");
+  assert.equal(kz`background-size : auto, 50%, contain`, "X00n0j,50%,1y");
+}
 
 console.log("ok");
 
@@ -140,6 +158,7 @@ console.log("ok");
 console.log("kz: Multiple rules");
 
 {
+  const kz = createKlaz(breakpoints);
   const actual = kz`
 color: red;
 padding-top: 0;
@@ -149,6 +168,7 @@ text-decoration: none
   assert.equal(actual, expected);
 }
 {
+  const kz = createKlaz(breakpoints);
   const actual = kz`;
 color: red;;
 padding-top: 0;

@@ -1,4 +1,4 @@
-import { NONE } from "./tabs.js";
+import { NONE } from "../lib/tabs.js";
 
 /**
  * @typedef {Record<string, object>} Kv

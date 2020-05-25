@@ -1,6 +1,5 @@
 import { strict as assert } from "assert";
-
-const NONE = "X";
+import { pseudos } from "../lib/tabs.js";
 
 const breakpoints = {
   sm: true,
@@ -8,35 +7,7 @@ const breakpoints = {
   lg: true,
 };
 
-const pseudos = {
-  active: true,
-  after: true,
-  before: true,
-  checked: true,
-  disabled: true,
-  empty: true,
-  enabled: true,
-  "first-child": true,
-  "first-letter": true,
-  "first-line": true,
-  "first-of-type": true,
-  focus: true,
-  hover: true,
-  "lang(": true,
-  "last-child": true,
-  "last-of-type": true,
-  link: true,
-  "not(": true,
-  "nth-child(": true,
-  "nth-last-child(": true,
-  "nth-last-of-type(": true,
-  "nth-of-type(": true,
-  "only-child": true,
-  "only-of-type": true,
-  root: true,
-  target: true,
-  visited: true,
-};
+const NONE = "X";
 
 const arrayJoin = Array.prototype.join;
 

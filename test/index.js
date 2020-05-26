@@ -1,4 +1,10 @@
-import { addRule, escapeValue, formatValue, createKlaz, createClassName } from "../lib/klaz.js";
+import {
+  addRule,
+  escapeValue,
+  formatValue,
+  createKlaz,
+  createClassName,
+} from "../lib/klaz.js";
 import { NONE } from "../lib/tabs.js";
 import { strict as assert } from "assert";
 
@@ -30,13 +36,13 @@ function render(styleSheet, breakPoints) {
         for (const val in vals) {
           const cn = createClassName(breakPoints, brkpt, pseudo, prop, val);
           const rule = `${cn}:${pseudo} { ${prop}: ${val}; }`;
-          buf.push(rule + '\n');
+          buf.push(rule + "\n");
         }
       }
       buf.push(`}\n`);
     }
   }
-  return buf.join('');
+  return buf.join("");
 }
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -47,7 +53,7 @@ console.log("render");
   /** @type {StyleSheet} styleSheet */
   let ss = {};
   let actual = render(ss, brkpts);
-  let expected = '';
+  let expected = "";
   assert.equal(actual, expected);
 }
 
@@ -68,7 +74,7 @@ console.log("render");
         [NONE]: {
           inline: "inline",
         },
-        'first-of-type': {
+        "first-of-type": {
           flex: "flex",
         },
       },

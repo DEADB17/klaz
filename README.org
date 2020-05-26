@@ -17,7 +17,7 @@ class concept.
 - Separate from base classes
 
 ** Change
-- Generate classes as they are used instead of pre-generating and purging
+- Only generate the class names that are used instead of pre-generating and purging
 - Use programming language facilities for abstraction
 - Write standard css properties and values but generate compact class names
 - Remove break-points and pseudo-classes from class names

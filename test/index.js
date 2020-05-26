@@ -1,14 +1,94 @@
-import { addRule, escapeValue, formatValue, createKlaz } from "../lib/klaz.js";
+import { addRule, escapeValue, formatValue, createKlaz, createClassName } from "../lib/klaz.js";
 import { NONE } from "../lib/tabs.js";
 import { strict as assert } from "assert";
 
-/** @type {import('../lib/klaz.js').Brk} */
-const breakpoints = {
+/** @typedef {import('../lib/klaz.js').Brk} Brk */
+/** @typedef {import('../lib/klaz.js').StyleSheet} StyleSheet */
+
+/** @type {Brk} */
+const brkpts = {
   [NONE]: "X",
   sm: "s",
   md: "m",
   lg: "l",
 };
+
+/**
+ * @arg {StyleSheet} styleSheet
+ * @arg {Brk} breakPoints
+ */
+function render(styleSheet, breakPoints) {
+  /** @type {string[]}*/
+  const buf = [];
+  for (const brkpt in breakPoints) {
+    const props = styleSheet[brkpt];
+    for (const prop in props) {
+      buf.push(`@media (min-width: ${brkpt}) {\n`);
+      const pseudos = props[prop];
+      for (const pseudo in pseudos) {
+        const vals = pseudos[pseudo];
+        for (const val in vals) {
+          const cn = createClassName(breakPoints, brkpt, pseudo, prop, val);
+          const rule = `${cn}:${pseudo} { ${prop}: ${val}; }`;
+          buf.push(rule + '\n');
+        }
+      }
+      buf.push(`}\n`);
+    }
+  }
+  return buf.join('');
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+
+console.log("render");
+
+{
+  /** @type {StyleSheet} styleSheet */
+  let ss = {};
+  let actual = render(ss, brkpts);
+  let expected = '';
+  assert.equal(actual, expected);
+}
+
+{
+  let ss = {
+    [NONE]: {
+      margin: {
+        [NONE]: {
+          "2px": "2px",
+          "0": "0",
+        },
+        hover: {
+          "2px": "2px",
+          "0": "0",
+        },
+      },
+      display: {
+        [NONE]: {
+          inline: "inline",
+        },
+        'first-of-type': {
+          flex: "flex",
+        },
+      },
+    },
+    md: {
+      overflow: {
+        hover: {
+          auto: "auto",
+        },
+      },
+    },
+  };
+  let actual = render(ss, brkpts);
+  console.log(actual);
+  let expected = Error;
+  assert.equal(actual, expected);
+}
+
+console.log("ok");
+process.exit(0);
 
 // /////////////////////////////////////////////////////////////////////////////
 
@@ -97,7 +177,7 @@ console.log("ok");
 console.log("kz: Single rule");
 
 {
-  const kz = createKlaz(breakpoints);
+  const kz = createKlaz(brkpts);
   assert.equal(kz`color:red`, "X01yred");
   assert.throws(() => kz`one`, "Too few: Single arg");
   assert.equal(kz``, "", "OK: no arguments");
@@ -117,7 +197,7 @@ console.log("ok");
 console.log("kz: Multiple rules");
 
 {
-  const kz = createKlaz(breakpoints);
+  const kz = createKlaz(brkpts);
   const actual = kz`
 color: red;
 padding-top: 0;
@@ -127,7 +207,7 @@ text-decoration: none
   assert.equal(actual, expected);
 }
 {
-  const kz = createKlaz(breakpoints);
+  const kz = createKlaz(brkpts);
   const actual = kz`;
 color: red;;
 padding-top: 0;

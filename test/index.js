@@ -3,56 +3,33 @@ import {
   escapeValue,
   formatValue,
   createKlaz,
-  createClassName,
+  createBrkTabSpec,
+  render,
 } from "../lib/klaz.js";
 import { NONE } from "../lib/tabs.js";
 import { strict as assert } from "assert";
 
 /** @typedef {import('../lib/klaz.js').Brk} Brk */
 /** @typedef {import('../lib/klaz.js').StyleSheet} StyleSheet */
-
-/** @type {Brk} */
-const brkpts = {
-  [NONE]: "X",
-  sm: "s",
-  md: "m",
-  lg: "l",
-};
-
-/**
- * @arg {StyleSheet} styleSheet
- * @arg {Brk} breakPoints
- */
-function render(styleSheet, breakPoints) {
-  /** @type {string[]}*/
-  const buf = [];
-  for (const brkpt in breakPoints) {
-    const props = styleSheet[brkpt];
-    for (const prop in props) {
-      buf.push(`@media (min-width: ${brkpt}) {\n`);
-      const pseudos = props[prop];
-      for (const pseudo in pseudos) {
-        const vals = pseudos[pseudo];
-        for (const val in vals) {
-          const cn = createClassName(breakPoints, brkpt, pseudo, prop, val);
-          const rule = `${cn}:${pseudo} { ${prop}: ${val}; }`;
-          buf.push(rule + "\n");
-        }
-      }
-      buf.push(`}\n`);
-    }
-  }
-  return buf.join("");
-}
+/** @typedef {{id: string, q: string}[]} BrkSpecs */
+/** @typedef {{tab: Brk, specs: BrkSpecs}} BrkTabSpec */
 
 // /////////////////////////////////////////////////////////////////////////////
 
 console.log("render");
 
+/** @type {BrkSpecs} */
+const userSpecs = [
+  { id: "sm", q: "min-width:  640px" },
+  { id: "md", q: "min-width:  960px" },
+  { id: "lg", q: "min-width: 1280px" },
+];
+
 {
   /** @type {StyleSheet} styleSheet */
   let ss = {};
-  let actual = render(ss, brkpts);
+  let { tab, specs } = createBrkTabSpec(userSpecs);
+  let actual = render(ss, tab, specs);
   let expected = "";
   assert.equal(actual, expected);
 }
@@ -62,7 +39,7 @@ console.log("render");
     [NONE]: {
       margin: {
         [NONE]: {
-          "2px": "2px",
+          "5rem": "5rem",
           "0": "0",
         },
         hover: {
@@ -85,16 +62,22 @@ console.log("render");
           auto: "auto",
         },
       },
+      margin: {
+        hover: {
+          "2px": "2px",
+          "0": "0",
+        },
+      },
     },
   };
-  let actual = render(ss, brkpts);
-  console.log(actual);
-  let expected = Error;
+  let { tab, specs } = createBrkTabSpec(userSpecs);
+  let actual = render(ss, tab, specs);
+  let expected =
+    "Z04h0 { margin: 0; } Z04h5rem { margin: 5rem; } Zd4h0:hover { margin: 0; } Zd4h2px:hover { margin: 2px; } Z02j53 { display: inline; } Zb2j3u:first-of-type { display: flex; } @media (min-width:  960px) { mdd5i0j:hover { overflow: auto; } } @media (min-width:  960px) { mdd4h0:hover { margin: 0; } mdd4h2px:hover { margin: 2px; } } ";
   assert.equal(actual, expected);
 }
 
 console.log("ok");
-process.exit(0);
 
 // /////////////////////////////////////////////////////////////////////////////
 
@@ -183,17 +166,17 @@ console.log("ok");
 console.log("kz: Single rule");
 
 {
-  const kz = createKlaz(brkpts);
-  assert.equal(kz`color:red`, "X01yred");
+  const { kz } = createKlaz(userSpecs);
+  assert.equal(kz`color:red`, "Z01yred");
   assert.throws(() => kz`one`, "Too few: Single arg");
   assert.equal(kz``, "", "OK: no arguments");
-  assert.equal(kz`margin-bottom:-6rem`, "X04i-6rem");
-  assert.equal(kz`sm:margin-bottom:-6rem`, "s04i-6rem");
-  assert.equal(kz`hover:margin-bottom:-6rem`, "Xd4i-6rem");
-  assert.equal(kz`sm:hover:margin-bottom:-6rem`, "sd4i-6rem");
-  assert.equal(kz`md:background-size:cover`, "m00n25");
-  assert.equal(kz`lg : background-size : auto 6px`, "l00n0j6px");
-  assert.equal(kz`background-size : auto, 50%, contain`, "X00n0j,50%,1y");
+  assert.equal(kz`margin-bottom:-6rem`, "Z04i-6rem");
+  assert.equal(kz`sm:margin-bottom:-6rem`, "sm04i-6rem");
+  assert.equal(kz`hover:margin-bottom:-6rem`, "Zd4i-6rem");
+  assert.equal(kz`sm:hover:margin-bottom:-6rem`, "smd4i-6rem");
+  assert.equal(kz`md:background-size:cover`, "md00n25");
+  assert.equal(kz`lg : background-size : auto 6px`, "lg00n0j6px");
+  assert.equal(kz`background-size : auto, 50%, contain`, "Z00n0j,50%,1y");
 }
 
 console.log("ok");
@@ -203,23 +186,33 @@ console.log("ok");
 console.log("kz: Multiple rules");
 
 {
-  const kz = createKlaz(brkpts);
+  const { kz } = createKlaz(userSpecs);
   const actual = kz`
 color: red;
 padding-top: 0;
 text-decoration: none
 `;
-  const expected = "X01yred X05q0 X07h7e";
+  const expected = "Z01yred Z05q0 Z07h7e";
   assert.equal(actual, expected);
 }
 {
-  const kz = createKlaz(brkpts);
+  const { kz } = createKlaz(userSpecs);
   const actual = kz`;
 color: red;;
 padding-top: 0;
 text-decoration: none;
 `;
-  const expected = "X01yred X05q0 X07h7e";
+  const expected = "Z01yred Z05q0 Z07h7e";
   assert.equal(actual, expected, "extra ;");
+}
+{
+  const { kz } = createKlaz(userSpecs);
+  const actual = kz`;
+sm:color: red;
+md:hover:padding-top: 0;
+active:text-decoration: none;
+`;
+  const expected = "sm01yred mdd5q0 Z17h7e";
+  assert.equal(actual, expected, "combo");
 }
 console.log("ok");

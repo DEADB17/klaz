@@ -11,8 +11,8 @@ import { strict as assert } from "assert";
 
 /** @typedef {import('../lib/klaz.js').Brk} Brk */
 /** @typedef {import('../lib/klaz.js').StyleSheet} StyleSheet */
-/** @typedef {{id: string, q: string}[]} BrkSpecs */
-/** @typedef {{tab: Brk, specs: BrkSpecs}} BrkTabSpec */
+/** @typedef {import('../lib/klaz.js').BrkSpecs} BrkSpecs */
+/** @typedef {import('../lib/klaz.js').BrkTabSpec} BrkTabSpec */
 
 // /////////////////////////////////////////////////////////////////////////////
 
@@ -28,9 +28,38 @@ const userSpecs = [
 {
   /** @type {StyleSheet} styleSheet */
   let ss = {};
-  let { tab, specs } = createBrkTabSpec(userSpecs);
-  let actual = render(ss, tab, specs);
+  let { specs } = createBrkTabSpec(userSpecs);
+  let actual = render(ss, specs);
   let expected = "";
+  assert.equal(actual, expected);
+}
+
+{
+  let ss = {
+    [NONE]: {
+      margin: {
+        [NONE]: {
+          "1rem": "1rem",
+        },
+        hover: {
+          "2px": "2px",
+        },
+      },
+    },
+    md: {
+      margin: {
+        [NONE]: {
+          "1rem": "1rem",
+        },
+        hover: {
+          "2px": "2px",
+        },
+      },
+    },
+  };
+  let { specs } = createBrkTabSpec(userSpecs);
+  let actual = render(ss, specs);
+  let expected = "c4h1rem { margin: 1rem; } c4h2px:hover { margin: 2px; } @media (min-width:  960px) { c4h1rem { margin: 1rem; } c4h2px:hover { margin: 2px; } } ";
   assert.equal(actual, expected);
 }
 
@@ -70,10 +99,10 @@ const userSpecs = [
       },
     },
   };
-  let { tab, specs } = createBrkTabSpec(userSpecs);
-  let actual = render(ss, tab, specs);
+  let { specs } = createBrkTabSpec(userSpecs);
+  let actual = render(ss, specs);
   let expected =
-    "Z04h0 { margin: 0; } Z04h5rem { margin: 5rem; } Zd4h0:hover { margin: 0; } Zd4h2px:hover { margin: 2px; } Z02j53 { display: inline; } Zb2j3u:first-of-type { display: flex; } @media (min-width:  960px) { mdd5i0j:hover { overflow: auto; } } @media (min-width:  960px) { mdd4h0:hover { margin: 0; } mdd4h2px:hover { margin: 2px; } } ";
+    "c4h0 { margin: 0; } c4h5rem { margin: 5rem; } c4h0:hover { margin: 0; } c4h2px:hover { margin: 2px; } c2j53 { display: inline; } c2j3u:first-of-type { display: flex; } @media (min-width:  960px) { c5i0j:hover { overflow: auto; } } @media (min-width:  960px) { c4h0:hover { margin: 0; } c4h2px:hover { margin: 2px; } } ";
   assert.equal(actual, expected);
 }
 
@@ -167,16 +196,16 @@ console.log("kz: Single rule");
 
 {
   const { kz } = createKlaz(userSpecs);
-  assert.equal(kz`color:red`, "Z01yred");
+  assert.equal(kz`color:red`, "c1yred");
   assert.throws(() => kz`one`, "Too few: Single arg");
   assert.equal(kz``, "", "OK: no arguments");
-  assert.equal(kz`margin-bottom:-6rem`, "Z04i-6rem");
-  assert.equal(kz`sm:margin-bottom:-6rem`, "sm04i-6rem");
-  assert.equal(kz`hover:margin-bottom:-6rem`, "Zd4i-6rem");
-  assert.equal(kz`sm:hover:margin-bottom:-6rem`, "smd4i-6rem");
-  assert.equal(kz`md:background-size:cover`, "md00n25");
-  assert.equal(kz`lg : background-size : auto 6px`, "lg00n0j6px");
-  assert.equal(kz`background-size : auto, 50%, contain`, "Z00n0j,50%,1y");
+  assert.equal(kz`margin-bottom:-6rem`, "c4i-6rem");
+  assert.equal(kz`sm:margin-bottom:-6rem`, "c4i-6rem");
+  assert.equal(kz`hover:margin-bottom:-6rem`, "c4i-6rem");
+  assert.equal(kz`sm:hover:margin-bottom:-6rem`, "c4i-6rem");
+  assert.equal(kz`md:background-size:cover`, "c0n25");
+  assert.equal(kz`lg : background-size : auto 6px`, "c0n0j6px");
+  assert.equal(kz`background-size : auto, 50%, contain`, "c0n0j,50%,1y");
 }
 
 console.log("ok");
@@ -192,7 +221,7 @@ color: red;
 padding-top: 0;
 text-decoration: none
 `;
-  const expected = "Z01yred Z05q0 Z07h7e";
+  const expected = "c1yred c5q0 c7h7e";
   assert.equal(actual, expected);
 }
 {
@@ -202,7 +231,7 @@ color: red;;
 padding-top: 0;
 text-decoration: none;
 `;
-  const expected = "Z01yred Z05q0 Z07h7e";
+  const expected = "c1yred c5q0 c7h7e";
   assert.equal(actual, expected, "extra ;");
 }
 {
@@ -212,7 +241,22 @@ sm:color: red;
 md:hover:padding-top: 0;
 active:text-decoration: none;
 `;
-  const expected = "sm01yred mdd5q0 Z17h7e";
+  const expected = "c1yred c5q0 c7h7e";
   assert.equal(actual, expected, "combo");
 }
+
+{
+  const { kz } = createKlaz(userSpecs);
+  const actual = kz`;
+sm:color: red;
+sm:color: red;
+md:active:text-decoration: none;
+md:hover:padding-top: 0;
+active:text-decoration: none;
+lg:hover:padding-top: 0;
+`;
+  const expected = "c1yred c7h7e c5q0";
+  assert.equal(actual, expected, "duplicates");
+}
+
 console.log("ok");

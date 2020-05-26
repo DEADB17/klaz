@@ -60,7 +60,7 @@ const userSpecs = [
   let { specs } = createBrkTabSpec(userSpecs);
   let actual = render(ss, specs);
   let expected =
-    "c4h1rem { margin: 1rem; } c4h2px:hover { margin: 2px; } @media (min-width:  960px) { c4h1rem { margin: 1rem; } c4h2px:hover { margin: 2px; } } ";
+    "k4h1rem { margin: 1rem; } k4h2px:hover { margin: 2px; } @media (min-width:  960px) { k4h1rem { margin: 1rem; } k4h2px:hover { margin: 2px; } } ";
   assert.equal(actual, expected);
 }
 
@@ -103,7 +103,7 @@ const userSpecs = [
   let { specs } = createBrkTabSpec(userSpecs);
   let actual = render(ss, specs);
   let expected =
-    "c4h0 { margin: 0; } c4h5rem { margin: 5rem; } c4h0:hover { margin: 0; } c4h2px:hover { margin: 2px; } c2j53 { display: inline; } c2j3u:first-of-type { display: flex; } @media (min-width:  960px) { c5i0j:hover { overflow: auto; } } @media (min-width:  960px) { c4h0:hover { margin: 0; } c4h2px:hover { margin: 2px; } } ";
+    "k4h0 { margin: 0; } k4h5rem { margin: 5rem; } k4h0:hover { margin: 0; } k4h2px:hover { margin: 2px; } k2j53 { display: inline; } k2j3u:first-of-type { display: flex; } @media (min-width:  960px) { k5i0j:hover { overflow: auto; } } @media (min-width:  960px) { k4h0:hover { margin: 0; } k4h2px:hover { margin: 2px; } } ";
   assert.equal(actual, expected);
 }
 
@@ -197,16 +197,16 @@ console.log("kz: Single rule");
 
 {
   const { kz } = klaz(userSpecs);
-  assert.equal(kz`color:red`, "c1yred");
+  assert.equal(kz`color:red`, "k1yred");
   assert.throws(() => kz`one`, "Too few: Single arg");
   assert.equal(kz``, "", "OK: no arguments");
-  assert.equal(kz`margin-bottom:-6rem`, "c4i-6rem");
-  assert.equal(kz`sm:margin-bottom:-6rem`, "c4i-6rem");
-  assert.equal(kz`hover:margin-bottom:-6rem`, "c4i-6rem");
-  assert.equal(kz`sm:hover:margin-bottom:-6rem`, "c4i-6rem");
-  assert.equal(kz`md:background-size:cover`, "c0n25");
-  assert.equal(kz`lg : background-size : auto 6px`, "c0n0j6px");
-  assert.equal(kz`background-size : auto, 50%, contain`, "c0n0j,50%,1y");
+  assert.equal(kz`margin-bottom:-6rem`, "k4i-6rem");
+  assert.equal(kz`sm:margin-bottom:-6rem`, "k4i-6rem");
+  assert.equal(kz`hover:margin-bottom:-6rem`, "k4i-6rem");
+  assert.equal(kz`sm:hover:margin-bottom:-6rem`, "k4i-6rem");
+  assert.equal(kz`md:background-size:cover`, "k0n25");
+  assert.equal(kz`lg : background-size : auto 6px`, "k0n0j6px");
+  assert.equal(kz`background-size : auto, 50%, contain`, "k0n0j,50%,1y");
 }
 
 console.log("ok");
@@ -222,7 +222,7 @@ color: red;
 padding-top: 0;
 text-decoration: none
 `;
-  const expected = "c1yred c5q0 c7h7e";
+  const expected = "k1yred k5q0 k7h7e";
   assert.equal(actual, expected);
 }
 {
@@ -232,7 +232,7 @@ color: red;;
 padding-top: 0;
 text-decoration: none;
 `;
-  const expected = "c1yred c5q0 c7h7e";
+  const expected = "k1yred k5q0 k7h7e";
   assert.equal(actual, expected, "extra ;");
 }
 {
@@ -242,7 +242,7 @@ sm:color: red;
 md:hover:padding-top: 0;
 active:text-decoration: none;
 `;
-  const expected = "c1yred c5q0 c7h7e";
+  const expected = "k1yred k5q0 k7h7e";
   assert.equal(actual, expected, "combo");
 }
 
@@ -256,7 +256,7 @@ md:hover:padding-top: 0;
 active:text-decoration: none;
 lg:hover:padding-top: 0;
 `;
-  const expected = "c1yred c7h7e c5q0";
+  const expected = "k1yred k7h7e k5q0";
   assert.equal(actual, expected, "duplicates");
 }
 

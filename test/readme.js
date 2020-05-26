@@ -28,13 +28,13 @@ lg:hover:color: yellow;
 
 assert.equal(
   classNames,
-  "c7h7e c1ypurple c1yred c1yyellow c1ygreen c1yolive c1ybrown"
+  "k7h7e k1ypurple k1yred k1yyellow k1ygreen k1yolive k1ybrown"
 );
 
 const ss = render();
 
 const expected =
-  "c7h7e { text-decoration: none; } c1ypurple { color: purple; } @media (min-width:  640px) { c1yred { color: red; } c1yyellow:hover { color: yellow; } } @media (min-width:  960px) { c1ygreen { color: green; } c1yolive:first-of-type { color: olive; } c1ybrown:hover { color: brown; } } @media (min-width: 1280px) { c1yred { color: red; } c1yyellow:hover { color: yellow; } } ";
+  "k7h7e { text-decoration: none; } k1ypurple { color: purple; } @media (min-width:  640px) { k1yred { color: red; } k1yyellow:hover { color: yellow; } } @media (min-width:  960px) { k1ygreen { color: green; } k1yolive:first-of-type { color: olive; } k1ybrown:hover { color: brown; } } @media (min-width: 1280px) { k1yred { color: red; } k1yyellow:hover { color: yellow; } } ";
 
 assert.equal(ss, expected);
 

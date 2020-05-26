@@ -2,7 +2,7 @@ import {
   addRule,
   escapeValue,
   formatValue,
-  createKlaz,
+  klaz,
   createBrkTabSpec,
   render,
 } from "../lib/klaz.js";
@@ -59,7 +59,8 @@ const userSpecs = [
   };
   let { specs } = createBrkTabSpec(userSpecs);
   let actual = render(ss, specs);
-  let expected = "c4h1rem { margin: 1rem; } c4h2px:hover { margin: 2px; } @media (min-width:  960px) { c4h1rem { margin: 1rem; } c4h2px:hover { margin: 2px; } } ";
+  let expected =
+    "c4h1rem { margin: 1rem; } c4h2px:hover { margin: 2px; } @media (min-width:  960px) { c4h1rem { margin: 1rem; } c4h2px:hover { margin: 2px; } } ";
   assert.equal(actual, expected);
 }
 
@@ -195,7 +196,7 @@ console.log("ok");
 console.log("kz: Single rule");
 
 {
-  const { kz } = createKlaz(userSpecs);
+  const { kz } = klaz(userSpecs);
   assert.equal(kz`color:red`, "c1yred");
   assert.throws(() => kz`one`, "Too few: Single arg");
   assert.equal(kz``, "", "OK: no arguments");
@@ -215,7 +216,7 @@ console.log("ok");
 console.log("kz: Multiple rules");
 
 {
-  const { kz } = createKlaz(userSpecs);
+  const { kz } = klaz(userSpecs);
   const actual = kz`
 color: red;
 padding-top: 0;
@@ -225,7 +226,7 @@ text-decoration: none
   assert.equal(actual, expected);
 }
 {
-  const { kz } = createKlaz(userSpecs);
+  const { kz } = klaz(userSpecs);
   const actual = kz`;
 color: red;;
 padding-top: 0;
@@ -235,7 +236,7 @@ text-decoration: none;
   assert.equal(actual, expected, "extra ;");
 }
 {
-  const { kz } = createKlaz(userSpecs);
+  const { kz } = klaz(userSpecs);
   const actual = kz`;
 sm:color: red;
 md:hover:padding-top: 0;
@@ -246,7 +247,7 @@ active:text-decoration: none;
 }
 
 {
-  const { kz } = createKlaz(userSpecs);
+  const { kz } = klaz(userSpecs);
   const actual = kz`;
 sm:color: red;
 sm:color: red;

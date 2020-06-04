@@ -48,7 +48,8 @@ function tester -d "Run tests: specific file or test/*.js"
     if test -n "$argv"
         set files $argv
     end
-    for f in $files; node $f; end
+    for f in $files; node $f &; end
+    wait
 end
 
 # Available tasks

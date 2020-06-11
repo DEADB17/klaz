@@ -1,21 +1,6 @@
 #!/usr/bin/env fish
 
-# set server_port 8888
-# set server_dir public
-
-# function server -d "Start http server"
-#     if test -n "$argv"
-#         npx http-server $argv
-#     else
-#         npx http-server $server_dir --port $server_port
-#     end
-# end
-
-# function start -d "Watch and serve"
-#     npx http-server $server_dir --port $server_port &
-#     watchexec make
-#     kill %1
-# end
+set npm_bin node_modules/.bin
 
 function install -d "Install asdf and npm"
     asdf install
@@ -32,22 +17,18 @@ function update -d "Update asdf and npm"
 end
 
 function format -d "Format with prettier"
-    if test -n "$argv"
-        npx prettier $argv
-    else
-        npx prettier --ignore-path .gitignore --write .
-    end
+    set --local opts --ignore-path .gitignore --write .
+    test -n "$argv"; and set opts $argv
+    $npm_bin/prettier $opts
 end
 
 function lint -d "Lint using typescript (tsc)"
-    tsc $argv
+    $npm_bin/tsc $argv
 end
 
 function tester -d "Run tests: specific file or test/*.js"
     set --local files test/*.js
-    if test -n "$argv"
-        set files $argv
-    end
+    test -n "$argv"; and set files $argv
     for f in $files; node $f &; end
     wait
 end

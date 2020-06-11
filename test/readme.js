@@ -1,4 +1,4 @@
-import { run, test, suite } from "@deadb17/tester/terminal.js";
+import { run, test } from "@deadb17/tester/terminal.js";
 import { strict as assert } from "assert";
 import { klaz } from "../lib/klaz.js";
 

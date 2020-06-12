@@ -198,6 +198,18 @@ run(
     assert.equal(kz`background-size : auto, 50%, contain`, "k0n0j,50%,1y");
   }),
 
+  test("kz: Rules with interpolated values", () => {
+    const { kz } = klaz(userSpecs);
+    assert.equal(kz`color:${"red"}`, "k1yred");
+    assert.throws(() => kz`o${"n"}e`, "Too few: Single arg");
+    assert.equal(kz`${""}`, "", "OK: no arguments");
+    assert.equal(kz`${""}m${"ar"}gin-bottom:${"-6rem"}`, "k4i-6rem");
+    assert.equal(
+      kz`${"sm"}:${"hover"}:${"margin-bottom"}:${"-6rem"}`,
+      "k4i-6rem"
+    );
+  }),
+
   ////////////////////////////////////////////////////////////////////////////////
 
   suite(

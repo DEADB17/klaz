@@ -60,7 +60,7 @@ run(
       let { specs } = createBrkTabSpec(userSpecs);
       let actual = render(ss, specs);
       let expected =
-        "k4h1rem { margin: 1rem; } k4h2px:hover { margin: 2px; } @media (min-width:  960px) { k4h1rem { margin: 1rem; } k4h2px:hover { margin: 2px; } } ";
+        ".k4h1rem { margin: 1rem; } .k4h2px:hover { margin: 2px; } @media (min-width:  960px) { .k4h1rem { margin: 1rem; } .k4h2px:hover { margin: 2px; } } ";
       assert.equal(actual, expected);
     }),
 
@@ -103,7 +103,7 @@ run(
       let { specs } = createBrkTabSpec(userSpecs);
       let actual = render(ss, specs);
       let expected =
-        "k4h0 { margin: 0; } k4h5rem { margin: 5rem; } k4h0:hover { margin: 0; } k4h2px:hover { margin: 2px; } k2j53 { display: inline; } k2j3u:first-of-type { display: flex; } @media (min-width:  960px) { k5i0j:hover { overflow: auto; } } @media (min-width:  960px) { k4h0:hover { margin: 0; } k4h2px:hover { margin: 2px; } } ";
+        ".k4h0 { margin: 0; } .k4h5rem { margin: 5rem; } .k4h0:hover { margin: 0; } .k4h2px:hover { margin: 2px; } .k2j53 { display: inline; } .k2j3u:first-of-type { display: flex; } @media (min-width:  960px) { .k5i0j:hover { overflow: auto; } } @media (min-width:  960px) { .k4h0:hover { margin: 0; } .k4h2px:hover { margin: 2px; } } ";
       assert.equal(actual, expected);
     })
   ),

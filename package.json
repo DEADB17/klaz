@@ -16,6 +16,7 @@
   },
   "type": "module",
   "main": "lib/index.js",
+  "types": "types/lib/index.d.ts",
   "dependencies": {},
   "devDependencies": {
     "@deadb17/tester": "github:deadb17/tester",

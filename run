@@ -26,6 +26,12 @@ function lint -d "Lint using typescript (tsc)"
     $npm_bin/tsc $argv
 end
 
+function emit-dts -d "Emit typescript declarations"
+    test -d types; and rm -r types
+    $npm_bin/tsc --allowJs --declaration --noEmit false --emitDeclarationOnly --outDir types $argv
+    rm -r types/test
+end
+
 function tester -d "Run tests: specific file or test/*.js"
     set --local files test/*.js
     test -n "$argv"; and set files $argv

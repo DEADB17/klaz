@@ -2,6 +2,8 @@ import {
   addRule,
   escapeValue,
   formatValue,
+  asClassName,
+  asSelector,
   klaz,
   createBrkTabSpec,
   render,
@@ -94,7 +96,7 @@ run(
           },
           margin: {
             hover: {
-              "2px": "2px",
+              "2.5rem": "2.5rem",
               "0": "0",
             },
           },
@@ -103,7 +105,7 @@ run(
       let { specs } = createBrkTabSpec(userSpecs);
       let actual = render(ss, specs);
       let expected =
-        ".k4h0 { margin: 0; } .k4h5rem { margin: 5rem; } .k4h0:hover { margin: 0; } .k4h2px:hover { margin: 2px; } .k2j53 { display: inline; } .k2j3u:first-of-type { display: flex; } @media (min-width:  960px) { .k5i0j:hover { overflow: auto; } } @media (min-width:  960px) { .k4h0:hover { margin: 0; } .k4h2px:hover { margin: 2px; } } ";
+        ".k4h0 { margin: 0; } .k4h5rem { margin: 5rem; } .k4h0:hover { margin: 0; } .k4h2px:hover { margin: 2px; } .k2j53 { display: inline; } .k2j3u:first-of-type { display: flex; } @media (min-width:  960px) { .k5i0j:hover { overflow: auto; } } @media (min-width:  960px) { .k4h0:hover { margin: 0; } .k4h2\\.5rem:hover { margin: 2.5rem; } } ";
       assert.equal(actual, expected);
     })
   ),
@@ -171,16 +173,23 @@ run(
     assert.equal(escapeValue("-ab-cd_0"), "-ab-cd_0");
     assert.equal(escapeValue("123456"), "123456");
     assert.equal(escapeValue("123.456"), "123\\.456");
-    assert.equal(escapeValue("~!@#$%^&*()+="), "\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\+\\=");
+    assert.equal(
+      escapeValue("~!@#$%^&*()+="),
+      "\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\+\\="
+    );
   }),
 
   ////////////////////////////////////////////////////////////////////////////////
 
   test("formatValue", () => {
-    assert.equal(formatValue("1px"), "1px");
-    assert.equal(formatValue("auto"), "0j");
-    assert.equal(formatValue("auto auto auto"), "0j0j0j");
-    assert.equal(formatValue("auto,auto,auto"), "0j\\,0j\\,0j");
+    assert.equal(formatValue(asClassName, "1px"), "1px");
+    assert.equal(formatValue(asSelector, "1px"), "1px");
+    assert.equal(formatValue(asClassName, "auto"), "0j");
+    assert.equal(formatValue(asSelector, "auto"), "0j");
+    assert.equal(formatValue(asClassName, "auto auto auto"), "0j0j0j");
+    assert.equal(formatValue(asSelector, "auto auto auto"), "0j0j0j");
+    assert.equal(formatValue(asClassName, "auto,auto,auto"), "0j,0j,0j");
+    assert.equal(formatValue(asSelector, "auto,auto,auto"), "0j\\,0j\\,0j");
   }),
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +205,7 @@ run(
     assert.equal(kz`sm:hover:margin-bottom:-6rem`, "k4i-6rem");
     assert.equal(kz`md:background-size:cover`, "k0n25");
     assert.equal(kz`lg : background-size : auto 6px`, "k0n0j6px");
-    assert.equal(kz`background-size : auto, 50%, contain`, "k0n0j\\,50\\%\\,1y");
+    assert.equal(kz`background-size : auto, 50%, contain`, "k0n0j,50%,1y");
   }),
 
   test("kz: Rules with interpolated values", () => {

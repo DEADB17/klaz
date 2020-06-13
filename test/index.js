@@ -170,7 +170,8 @@ run(
   test("escapeValue", () => {
     assert.equal(escapeValue("-ab-cd_0"), "-ab-cd_0");
     assert.equal(escapeValue("123456"), "123456");
-    assert.equal(escapeValue("~!@#$%^&*()+="), "~!@#$%^&*()+=");
+    assert.equal(escapeValue("123.456"), "123\\.456");
+    assert.equal(escapeValue("~!@#$%^&*()+="), "\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\+\\=");
   }),
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +180,7 @@ run(
     assert.equal(formatValue("1px"), "1px");
     assert.equal(formatValue("auto"), "0j");
     assert.equal(formatValue("auto auto auto"), "0j0j0j");
-    assert.equal(formatValue("auto,auto,auto"), "0j,0j,0j");
+    assert.equal(formatValue("auto,auto,auto"), "0j\\,0j\\,0j");
   }),
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -195,7 +196,7 @@ run(
     assert.equal(kz`sm:hover:margin-bottom:-6rem`, "k4i-6rem");
     assert.equal(kz`md:background-size:cover`, "k0n25");
     assert.equal(kz`lg : background-size : auto 6px`, "k0n0j6px");
-    assert.equal(kz`background-size : auto, 50%, contain`, "k0n0j,50%,1y");
+    assert.equal(kz`background-size : auto, 50%, contain`, "k0n0j\\,50\\%\\,1y");
   }),
 
   test("kz: Rules with interpolated values", () => {

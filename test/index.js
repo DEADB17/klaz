@@ -62,7 +62,7 @@ run(
       let { specs } = createBrkTabSpec(userSpecs);
       let actual = render(ss, specs);
       let expected =
-        ".k4h1rem { margin: 1rem; } .k4h2px:hover { margin: 2px; } @media (min-width:  960px) { .k4h1rem { margin: 1rem; } .k4h2px:hover { margin: 2px; } } ";
+        "._4h1rem { margin: 1rem; } ._4h2px:hover { margin: 2px; } @media (min-width:  960px) { .md4h1rem { margin: 1rem; } .md4h2px:hover { margin: 2px; } } ";
       assert.equal(actual, expected);
     }),
 
@@ -105,7 +105,7 @@ run(
       let { specs } = createBrkTabSpec(userSpecs);
       let actual = render(ss, specs);
       let expected =
-        ".k4h0 { margin: 0; } .k4h5rem { margin: 5rem; } .k4h0:hover { margin: 0; } .k4h2px:hover { margin: 2px; } .k2j53 { display: inline; } .k2j3u:first-of-type { display: flex; } @media (min-width:  960px) { .k5i0j:hover { overflow: auto; } } @media (min-width:  960px) { .k4h0:hover { margin: 0; } .k4h2\\.5rem:hover { margin: 2.5rem; } } ";
+        "._4h0 { margin: 0; } ._4h5rem { margin: 5rem; } ._4h0:hover { margin: 0; } ._4h2px:hover { margin: 2px; } ._2j53 { display: inline; } ._2j3u:first-of-type { display: flex; } @media (min-width:  960px) { .md5i0j:hover { overflow: auto; } } @media (min-width:  960px) { .md4h0:hover { margin: 0; } .md4h2\\.5rem:hover { margin: 2.5rem; } } ";
       assert.equal(actual, expected);
     })
   ),
@@ -196,27 +196,27 @@ run(
 
   test("kz: Single rule", () => {
     const { kz } = klaz(userSpecs);
-    assert.equal(kz`color:red`, "k1yred");
+    assert.equal(kz`color:red`, "_1yred");
     assert.throws(() => kz`one`, "Too few: Single arg");
     assert.equal(kz``, "", "OK: no arguments");
-    assert.equal(kz`margin-bottom:-6rem`, "k4i-6rem");
-    assert.equal(kz`sm:margin-bottom:-6rem`, "k4i-6rem");
-    assert.equal(kz`hover:margin-bottom:-6rem`, "k4i-6rem");
-    assert.equal(kz`sm:hover:margin-bottom:-6rem`, "k4i-6rem");
-    assert.equal(kz`md:background-size:cover`, "k0n25");
-    assert.equal(kz`lg : background-size : auto 6px`, "k0n0j6px");
-    assert.equal(kz`background-size : auto, 50%, contain`, "k0n0j,50%,1y");
+    assert.equal(kz`margin-bottom:-6rem`, "_4i-6rem");
+    assert.equal(kz`sm:margin-bottom:-6rem`, "sm4i-6rem");
+    assert.equal(kz`hover:margin-bottom:-6rem`, "_4i-6rem");
+    assert.equal(kz`sm:hover:margin-bottom:-6rem`, "sm4i-6rem");
+    assert.equal(kz`md:background-size:cover`, "md0n25");
+    assert.equal(kz`lg : background-size : auto 6px`, "lg0n0j6px");
+    assert.equal(kz`background-size : auto, 50%, contain`, "_0n0j,50%,1y");
   }),
 
   test("kz: Rules with interpolated values", () => {
     const { kz } = klaz(userSpecs);
-    assert.equal(kz`color:${"red"}`, "k1yred");
+    assert.equal(kz`color:${"red"}`, "_1yred");
     assert.throws(() => kz`o${"n"}e`, "Too few: Single arg");
     assert.equal(kz`${""}`, "", "OK: no arguments");
-    assert.equal(kz`${""}m${"ar"}gin-bottom:${"-6rem"}`, "k4i-6rem");
+    assert.equal(kz`${""}m${"ar"}gin-bottom:${"-6rem"}`, "_4i-6rem");
     assert.equal(
       kz`${"sm"}:${"hover"}:${"margin-bottom"}:${"-6rem"}`,
-      "k4i-6rem"
+      "sm4i-6rem"
     );
   }),
 
@@ -230,7 +230,7 @@ color: red;
 padding-top: 0;
 text-decoration: none
 `;
-      const expected = "k1yred k5q0 k7h7e";
+      const expected = "_1yred _5q0 _7h7e";
       assert.equal(actual, expected);
     }),
     test("kz: Multiple rules", () => {
@@ -240,7 +240,7 @@ color: red;;
 padding-top: 0;
 text-decoration: none;
 `;
-      const expected = "k1yred k5q0 k7h7e";
+      const expected = "_1yred _5q0 _7h7e";
       assert.equal(actual, expected, "extra ;");
     }),
     test("kz: Multiple rules", () => {
@@ -250,7 +250,7 @@ sm:color: red;;;;
 md:hover:padding-top: 0;;
 active:text-decoration: none;;;;
 `;
-      const expected = "k1yred k5q0 k7h7e";
+      const expected = "sm1yred md5q0 _7h7e";
       assert.equal(actual, expected, "combo");
     }),
 
@@ -264,7 +264,7 @@ md:hover:padding-top: 0;
 active:text-decoration: none;
 lg:hover:padding-top: 0;
 `;
-      const expected = "k1yred k7h7e k5q0";
+      const expected = "sm1yred md7h7e md5q0 _7h7e lg5q0";
       assert.equal(actual, expected, "duplicates");
     })
   )

@@ -23,10 +23,11 @@ export function formatValue(fn: (val: string) => string, val: string): string;
 /** @arg {string[]} classNames */
 export function dedupe(classNames: string[]): string[];
 /**
+ * @arg {string} at
  * @arg {string} prop
  * @arg {string} val
  */
-export function createClassName(prop: string, val: string): string;
+export function createClassName(at: string, prop: string, val: string): string;
 /** @arg {string} val */
 export function asClassName(val: string): string;
 /** @arg {string} val */
@@ -34,10 +35,10 @@ export function asSelector(val: string): string;
 /**
  * @arg {StyleSheet} sheet
  * @arg {Brk} brk
- * @arg {TemplateStringsArray} strings
+ * @arg {TemplateStringsArray | string} strings
  * @arg {(string|number)[]} keys
  */
-export function kz(sheet: StyleSheet, brk: Brk, strings: TemplateStringsArray, ...keys: (string | number)[]): string;
+export function kz(sheet: StyleSheet, brk: Brk, strings: TemplateStringsArray | string, ...keys: (string | number)[]): string;
 /** @arg {BrkSpecs} userSpecs */
 export function createBrkTabSpec(userSpecs: {
     id: string;
@@ -64,7 +65,7 @@ export function klaz(userSpecs: {
     id: string;
     q: string;
 }[]): {
-    kz: (strings: TemplateStringsArray, ...keys: (string | number)[]) => string;
+    kz: (strings: TemplateStringsArray | string, ...keys: (string | number)[]) => string;
     render: () => string;
 };
 export type Kv = {

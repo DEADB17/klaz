@@ -233,7 +233,7 @@ text-decoration: none
       const expected = "_1yred _5q0 _7h7e";
       assert.equal(actual, expected);
     }),
-    test("kz: Multiple rules", () => {
+    test("kz: Multiple rules with multiple ;", () => {
       const { kz } = klaz(userSpecs);
       const actual = kz`;
 color: red;;
@@ -243,12 +243,12 @@ text-decoration: none;
       const expected = "_1yred _5q0 _7h7e";
       assert.equal(actual, expected, "extra ;");
     }),
-    test("kz: Multiple rules", () => {
+    test("kz: Multiple rules with multiple ; and spaces", () => {
       const { kz } = klaz(userSpecs);
       const actual = kz`;
-sm:color: red;;;;
+sm:color: red;; ;;
 md:hover:padding-top: 0;;
-active:text-decoration: none;;;;
+active:text-decoration: none   ; ;; ;
 `;
       const expected = "sm1yred md5q0 _7h7e";
       assert.equal(actual, expected, "combo");

@@ -267,5 +267,21 @@ lg:hover:padding-top: 0;
       const expected = "sm1yred md7h7e md5q0 _7h7e lg5q0";
       assert.equal(actual, expected, "duplicates");
     })
+  ),
+
+  ////////////////////////////////////////////////////////////////////////////////
+
+  suite(
+    test("ks: Join strings before parsing", () => {
+      const { ks } = klaz(userSpecs);
+      const color = { red: "#F00" };
+      const gut = ["0", "1px", "2px"];
+      const actual = ks(
+        "sm:hover:padding-left:" + gut[1],
+        "color:" + color.red
+      );
+      const expected = "sm5o1px _1y#F00";
+      assert.equal(actual, expected);
+    })
   )
 );

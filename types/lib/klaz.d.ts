@@ -38,7 +38,7 @@ export function asSelector(val: string): string;
  * @arg {TemplateStringsArray | string} strings
  * @arg {(string|number)[]} keys
  */
-export function kz(sheet: StyleSheet, brk: Brk, strings: TemplateStringsArray | string, ...keys: (string | number)[]): string;
+export function parse(sheet: StyleSheet, brk: Brk, strings: TemplateStringsArray | string, ...keys: (string | number)[]): string;
 /** @arg {BrkSpecs} userSpecs */
 export function createBrkTabSpec(userSpecs: {
     id: string;
@@ -66,6 +66,7 @@ export function klaz(userSpecs: {
     q: string;
 }[]): {
     kz: (strings: TemplateStringsArray | string, ...keys: (string | number)[]) => string;
+    ks: (...strings: string[]) => string;
     render: () => string;
 };
 export type Kv = {

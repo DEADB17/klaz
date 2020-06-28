@@ -5,6 +5,7 @@ import {
   asClassName,
   asSelector,
   klaz,
+  kzPrefix,
   createBrkTabSpec,
   render,
 } from "../lib/klaz.js";
@@ -283,5 +284,33 @@ lg:hover:padding-top: 0;
       const expected = "sm5o1px _1y#F00";
       assert.equal(actual, expected);
     })
+  ),
+
+  ////////////////////////////////////////////////////////////////////////////////
+
+  suite(
+    test("kzPrefix: Single string", () => {
+      const actual = "color: red";
+      const expected = "hover:color: red;";
+      assert.equal(kzPrefix("hover", actual), expected);
+    }),
+
+    test("kzPrefix: Multiple strings", () => {
+      const actual = kzPrefix("sm", "color: red", "padding-top: 0");
+      const expected = "sm:color: red;sm:padding-top: 0;";
+      assert.equal(actual, expected);
+    }),
+
+    test("kzPrefix: No prefix. Multiple strings", () => {
+      const actual = kzPrefix("", "color: red", "padding-top: 0");
+      const expected = "color: red;padding-top: 0;";
+      assert.equal(actual, expected);
+    }),
+
+    test("kzPrefix: Multiple strings with ; and spaces", () => {
+      const actual = kzPrefix("", "color: red ;   ;; ;  ", "padding-top: 0; ");
+      const expected = "color: red;padding-top: 0;";
+      assert.equal(actual, expected);
+    }),
   )
 );

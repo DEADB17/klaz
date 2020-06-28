@@ -313,31 +313,8 @@ lg:hover:padding-top: 0;
       assert.equal(kzPrefix(actual), expected);
     }),
 
-    test("kzPrefix: An array of strings with pairs", () => {
-      const actual = [
-        ["border", " none  "],
-        ["color : ", " : red; "],
-        "padding-top: 0;",
-      ];
-      const expected = "border:none;color:red;padding-top: 0;";
-      assert.equal(kzPrefix(actual), expected);
-    }),
-
-    test("kzPrefix: An array of strings with multi pairs", () => {
-      const actual = [
-        ["sm", "border", "none"],
-        ["hover", "color", "green"],
-        ["md", "hover", "cursor", "pointer"],
-        ["color", "red"],
-        "padding-top: 0",
-      ];
-      const expected =
-        "sm:border:none;hover:color:green;md:hover:cursor:pointer;color:red;padding-top: 0;";
-      assert.equal(kzPrefix(actual), expected);
-    }),
-
     test("kzPrefix: Prefix", () => {
-      const actual = [["border", "none"], "padding-top: 0"];
+      const actual = ["border:none", "padding-top: 0"];
       const expected = "md:border:none;md:padding-top: 0;";
       assert.equal(kzPrefix(actual, "md"), expected);
     }),
@@ -345,12 +322,12 @@ lg:hover:padding-top: 0;
     test("kzPrefix: Object", () => {
       const actual = {
         md: {
-          hover: ["color:red", ["background", "green"]],
-          "": ["color:red", ["background", "green"]],
+          hover: ["color:red", "background:green"],
+          "": ["color:red", "background:green"],
         },
-        hover: ["color:red", ["background", "green"]],
-        "": ["color:red", ["background", "green"]],
-        a: { b: { c: { d: ["k0:v0", ["k1", "v1"]] } } },
+        hover: ["color:red", "background:green"],
+        "": ["color:red", "background:green"],
+        a: { b: { c: { d: ["k0:v0", "k1:v1"] } } },
       };
       const expected = [
         "md:hover:color:red;",

@@ -311,6 +311,6 @@ lg:hover:padding-top: 0;
       const actual = kzPrefix("", "color: red ;   ;; ;  ", "padding-top: 0; ");
       const expected = "color: red;padding-top: 0;";
       assert.equal(actual, expected);
-    }),
+    })
   )
 );

@@ -5,6 +5,7 @@ import {
   asClassName,
   asSelector,
   klaz,
+  kzPrefix,
   createBrkTabSpec,
   render,
 } from "../lib/klaz.js";
@@ -282,6 +283,88 @@ lg:hover:padding-top: 0;
       );
       const expected = "sm5o1px _1y#F00";
       assert.equal(actual, expected);
+    })
+  ),
+
+  ////////////////////////////////////////////////////////////////////////////////
+
+  suite(
+    test("kzPrefix: A string", () => {
+      const actual = "color: red";
+      const expected = "color: red";
+      assert.equal(kzPrefix(actual), expected);
+    }),
+
+    test("kzPrefix: An array of strings", () => {
+      const actual = ["color: red", "padding-top: 0"];
+      const expected = "color: red;padding-top: 0;";
+      assert.equal(kzPrefix(actual), expected);
+    }),
+
+    test("kzPrefix: An array of strings with ;", () => {
+      const actual = ["color: red;", "padding-top: 0;"];
+      const expected = "color: red;padding-top: 0;";
+      assert.equal(kzPrefix(actual), expected);
+    }),
+
+    test("kzPrefix: An array of strings with ; and spaces", () => {
+      const actual = ["color: red ;   ;; ;  ", "padding-top: 0; "];
+      const expected = "color: red;padding-top: 0;";
+      assert.equal(kzPrefix(actual), expected);
+    }),
+
+    test("kzPrefix: An array of strings with pairs", () => {
+      const actual = [
+        ["border", " none  "],
+        ["color : ", " : red; "],
+        "padding-top: 0;",
+      ];
+      const expected = "border:none;color:red;padding-top: 0;";
+      assert.equal(kzPrefix(actual), expected);
+    }),
+
+    test("kzPrefix: An array of strings with multi pairs", () => {
+      const actual = [
+        ["sm", "border", "none"],
+        ["hover", "color", "green"],
+        ["md", "hover", "cursor", "pointer"],
+        ["color", "red"],
+        "padding-top: 0",
+      ];
+      const expected =
+        "sm:border:none;hover:color:green;md:hover:cursor:pointer;color:red;padding-top: 0;";
+      assert.equal(kzPrefix(actual), expected);
+    }),
+
+    test("kzPrefix: Prefix", () => {
+      const actual = [["border", "none"], "padding-top: 0"];
+      const expected = "md:border:none;md:padding-top: 0;";
+      assert.equal(kzPrefix(actual, "md"), expected);
+    }),
+
+    test("kzPrefix: Object", () => {
+      const actual = {
+        md: {
+          hover: ["color:red", ["background", "green"]],
+          "": ["color:red", ["background", "green"]],
+        },
+        hover: ["color:red", ["background", "green"]],
+        "": ["color:red", ["background", "green"]],
+        a: { b: { c: { d: ["k0:v0", ["k1", "v1"]] } } },
+      };
+      const expected = [
+        "md:hover:color:red;",
+        "md:hover:background:green;",
+        "md:color:red;",
+        "md:background:green;",
+        "hover:color:red;",
+        "hover:background:green;",
+        "color:red;",
+        "background:green;",
+        "a:b:c:d:k0:v0;",
+        "a:b:c:d:k1:v1;",
+      ].join("");
+      assert.equal(kzPrefix(actual), expected);
     })
   )
 );

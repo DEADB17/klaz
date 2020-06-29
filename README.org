@@ -27,7 +27,7 @@ class concept.
 Writing
 
 #+begin_src javascript
-  import { klaz } from "./klaz.js";
+  import { createKlaz } from "./klaz.js";
 
   const breakPoints = [
     { id: "sm", q: "min-width:  640px" },
@@ -35,8 +35,8 @@ Writing
     { id: "lg", q: "min-width: 1280px" },
   ];
 
-  const { kz, render } = klaz(breakPoints);
-  const classNames = kz`;
+  const { kz, render } = createKlaz(breakPoints);
+  const classNames = kz`
   text-decoration: none;
   color:purple;
   sm:color: red;

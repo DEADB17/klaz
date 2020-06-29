@@ -1,6 +1,6 @@
 import { run, test } from "@deadb17/tester/terminal.js";
 import { strict as assert } from "assert";
-import { klaz } from "../lib/klaz.js";
+import { createKlaz } from "../lib/klaz.js";
 
 /** @typedef {import('../lib/klaz.js').BrkSpecs} BrkSpecs */
 
@@ -13,7 +13,7 @@ run(
       { id: "lg", q: "min-width: 1280px" },
     ];
 
-    const { kz, render } = klaz(breakPoints);
+    const { kz, render } = createKlaz(breakPoints);
     const classNames = kz`;
 text-decoration: none;
 color:purple;

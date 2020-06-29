@@ -4,7 +4,7 @@ import {
   formatValue,
   asClassName,
   asSelector,
-  klaz,
+  createKlaz,
   kzPrefix,
   createBrkTabSpec,
   render,
@@ -196,7 +196,7 @@ run(
   ////////////////////////////////////////////////////////////////////////////////
 
   test("kz: Single rule", () => {
-    const { kz } = klaz(userSpecs);
+    const { kz } = createKlaz(userSpecs);
     assert.equal(kz`color:red`, "_1yred");
     assert.throws(() => kz`one`, "Too few: Single arg");
     assert.equal(kz``, "", "OK: no arguments");
@@ -210,7 +210,7 @@ run(
   }),
 
   test("kz: Rules with interpolated values", () => {
-    const { kz } = klaz(userSpecs);
+    const { kz } = createKlaz(userSpecs);
     assert.equal(kz`color:${"red"}`, "_1yred");
     assert.throws(() => kz`o${"n"}e`, "Too few: Single arg");
     assert.equal(kz`${""}`, "", "OK: no arguments");
@@ -225,7 +225,7 @@ run(
 
   suite(
     test("kz: Multiple rules", () => {
-      const { kz } = klaz(userSpecs);
+      const { kz } = createKlaz(userSpecs);
       const actual = kz`
 color: red;
 padding-top: 0;
@@ -235,7 +235,7 @@ text-decoration: none
       assert.equal(actual, expected);
     }),
     test("kz: Multiple rules with multiple ;", () => {
-      const { kz } = klaz(userSpecs);
+      const { kz } = createKlaz(userSpecs);
       const actual = kz`;
 color: red;;
 padding-top: 0;
@@ -245,7 +245,7 @@ text-decoration: none;
       assert.equal(actual, expected, "extra ;");
     }),
     test("kz: Multiple rules with multiple ; and spaces", () => {
-      const { kz } = klaz(userSpecs);
+      const { kz } = createKlaz(userSpecs);
       const actual = kz`;
 sm:color: red;; ;;
 md:hover:padding-top: 0;;
@@ -256,7 +256,7 @@ active:text-decoration: none   ; ;; ;
     }),
 
     test("kz: Multiple rules", () => {
-      const { kz } = klaz(userSpecs);
+      const { kz } = createKlaz(userSpecs);
       const actual = kz`;
 sm:color: red;
 sm:color: red;
@@ -274,7 +274,7 @@ lg:hover:padding-top: 0;
 
   suite(
     test("ks: Join strings before parsing", () => {
-      const { ks } = klaz(userSpecs);
+      const { ks } = createKlaz(userSpecs);
       const color = { red: "#F00" };
       const gut = ["0", "1px", "2px"];
       const actual = ks(

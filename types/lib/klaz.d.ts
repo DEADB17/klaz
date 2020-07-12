@@ -59,14 +59,20 @@ export function render(styleSheet: StyleSheet, specs: {
     q: string;
 }[]): string;
 /**
+ * @arg {string} prefix
+ * @arg {string[]} args
+ */
+export function kzPrefix(prefix: string, ...args: string[]): string;
+/**
  * @arg {BrkSpecs} userSpecs
  */
-export function klaz(userSpecs: {
+export function createKlaz(userSpecs: {
     id: string;
     q: string;
 }[]): {
     kz: (strings: TemplateStringsArray | string, ...keys: (string | number)[]) => string;
     ks: (...strings: string[]) => string;
+    kp: (prefix: string, ...args: string[]) => string;
     render: () => string;
 };
 export type Kv = {

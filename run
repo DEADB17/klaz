@@ -33,7 +33,7 @@ function emit-dts -d "Emit typescript declarations"
 end
 
 function tester -d "Run tests: specific file or test/*.js"
-    set --local files test/*.js
+    set --local files test/uvu.js
     test -n "$argv"; and set files $argv
     for f in $files; node $f &; end
     wait
